@@ -1,0 +1,9 @@
+{
+  "tooltip.smart_pot.switch_visibility_state": "Switch the visibility of SmartPot UI",
+  "tooltip.smart_pot.require_contain_ingredient_greater": "contain ingredient(greater or equal than)",
+  "tooltip.smart_pot.require_contain_ingredient_less": "contain ingredient(less or equal than)",
+  "widget.smart_pot.piority": "Piority:%d",
+  "widget.smart_pot.level": "PotLevel(%d)%d",
+  "widget.smart_pot.weight_time": "Weight:%d Cook Time:%d Ticks",
+  "widget.smart_pot.percent_display": "percent:%.2f"
+}

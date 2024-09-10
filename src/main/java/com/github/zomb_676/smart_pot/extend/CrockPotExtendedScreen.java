@@ -3,9 +3,11 @@ package com.github.zomb_676.smart_pot.extend;
 
 import com.github.zomb_676.smart_pot.CookCandidate;
 import com.github.zomb_676.smart_pot.RecipeAnalyzer;
+import com.github.zomb_676.smart_pot.compat.jei.ModCompact;
 import com.github.zomb_676.smart_pot.widget.RecipeWidget;
 import com.github.zomb_676.smart_pot.widget.RecipesContainerWidget;
 import com.github.zomb_676.smart_pot.widget.SatisfyLevel;
+import com.github.zomb_676.smart_pot.widget.VisibilityWidget;
 import com.github.zomb_676.smart_pot.widget.requirementWidget.RequirementContainerWidget;
 import com.google.common.collect.ImmutableTable;
 import com.sihenzhang.crockpot.base.FoodCategory;
@@ -40,6 +42,7 @@ public class CrockPotExtendedScreen {
     private RecipesContainerWidget recipesContainerWidget;
     private ImmutableTable<FoodCategory, ItemStack, Float> ingredientFoodValueTable;
     private RequirementContainerWidget requirementContainerWidget;
+    private VisibilityWidget visibilityButton;
 
     public CrockPotExtendedScreen(CrockPotScreen crockPotScreen) {
         this.screen = crockPotScreen;
@@ -70,9 +73,17 @@ public class CrockPotExtendedScreen {
         this.reCalculateRecipes();
 
         this.requirementContainerWidget = this.screen.addRenderableWidget(new RequirementContainerWidget());
+
+        var button = new VisibilityWidget(screen.getGuiLeft() + 176 - 23,
+                screen.getGuiTop() + 6, 16, 16);
+        this.visibilityButton = this.screen.addRenderableWidget(button);
     }
 
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        var hide = !ModCompact.isJeiOverlayDisplayed.get().getAsBoolean();
+        this.recipesContainerWidget.visible = hide;
+        this.requirementContainerWidget.visible = hide;
+
         if (updateRecordInputs()) {
             this.reCalculateRecipes();
         }
@@ -155,5 +166,9 @@ public class CrockPotExtendedScreen {
 
     public RecipesContainerWidget getRecipesContainerWidget() {
         return recipesContainerWidget;
+    }
+
+    public boolean displaySelf() {
+        return visibilityButton.isVisibility();
     }
 }

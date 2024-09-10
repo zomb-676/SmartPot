@@ -1,6 +1,7 @@
 package com.github.zomb_676.smart_pot.widget;
 
 import com.github.zomb_676.smart_pot.extend.ICrockPotExtendedScreen;
+import com.github.zomb_676.smart_pot.i18.I18Entries;
 import com.sihenzhang.crockpot.item.CrockPotItems;
 import com.sihenzhang.crockpot.recipe.cooking.CrockPotCookingRecipe;
 import net.minecraft.Util;
@@ -44,10 +45,11 @@ public class RecipeWidget extends AbstractWidget {
         pGuiGraphics.renderItem(this.resultItem, 0, 0);
         if (percent != 0.0f) {
             renderScrollingString(pGuiGraphics, this.resultItem.getHoverName(), 19, 0, this.getWidth() - 5, 8, 0xffffffff);
-            var percentStr = "percent:%.1f%%".formatted(this.percent * 100);
+            var percentStr = I18Entries.WIDGET_PERCENT_DISPLAY.translate(this.percent * 100);
             //TODO just hardcode now
-            if (this.recipe.getResult().is(CrockPotItems.HOT_COCOA.get()) && percent < 1f) percentStr += "?";
-            renderScrollingString(pGuiGraphics, Component.literal(percentStr),
+            if (this.recipe.getResult().is(CrockPotItems.HOT_COCOA.get()) && percent < 1f)
+                percentStr.append(Component.literal("?"));
+            renderScrollingString(pGuiGraphics, percentStr,
                     19, 10, this.getWidth() - 5, 18, 0xffffffff);
         } else {
             renderScrollingString(pGuiGraphics, this.resultItem.getHoverName(), 19, 0, this.getWidth() - 5, 18, 0xffffffff);

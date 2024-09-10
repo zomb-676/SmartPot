@@ -1,0 +1,9 @@
+{
+  "tooltip.smart_pot.switch_visibility_state": "切换SmartPot UI可见性",
+  "tooltip.smart_pot.require_contain_ingredient_greater": "包含材料(大于等于)",
+  "tooltip.smart_pot.require_contain_ingredient_less": "包含材料(小于等于)",
+  "widget.smart_pot.piority": "优先级:%d",
+  "widget.smart_pot.level": "等级(%d)%d",
+  "widget.smart_pot.weight_time": "权重:%d 烹饪时间:%d刻",
+  "widget.smart_pot.percent_display": "产出率:%.2f"
+}

@@ -15,6 +15,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
+import mezz.jei.api.gui.handlers.IGlobalGuiHandler;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IJeiHelpers;
@@ -25,6 +26,7 @@ import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
 import mezz.jei.api.runtime.IClickableIngredient;
+import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.renderer.Rect2i;
@@ -35,6 +37,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -113,7 +116,7 @@ public class SmartPotJeiPlugin implements IModPlugin {
         //let jei know what ItemStack is under mouse
         registration.addGenericGuiContainerHandler(CrockPotScreen.class, new IGuiContainerHandler<CrockPotScreen>() {
             @Override
-            public Optional<IClickableIngredient<?>> getClickableIngredientUnderMouse(@NotNull CrockPotScreen screen, double mouseX, double mouseY) {
+            public @NotNull Optional<IClickableIngredient<?>> getClickableIngredientUnderMouse(@NotNull CrockPotScreen screen, double mouseX, double mouseY) {
                 if (!(screen instanceof ICrockPotExtendedScreen extendedScreen)) return Optional.empty();
                 CrockPotExtendedScreen extendScreen = extendedScreen.smart_pot$getExtendedScreen();
                 return Optional.ofNullable(extendScreen.getRequirementContainerWidget())
@@ -124,6 +127,18 @@ public class SmartPotJeiPlugin implements IModPlugin {
                         .map(Function.identity());
             }
         });
+        registration.addGlobalGuiHandler(new IGlobalGuiHandler() {
+            @Override
+            public @NotNull Collection<Rect2i> getGuiExtraAreas() {
+                if (!(Minecraft.getInstance().screen instanceof ICrockPotExtendedScreen ext)) return List.of();
+                var screen = ext.smart_pot$getExtendedScreen();
+                if (screen.displaySelf()) {
+                    return List.of(fullScreenRect());
+                } else {
+                    return List.of();
+                }
+            }
+        });
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -131,6 +146,11 @@ public class SmartPotJeiPlugin implements IModPlugin {
         var item = ingredient.getItemStack().get().getItem();
         var level = Objects.requireNonNull(Minecraft.getInstance().level);
         return level.getRecipeManager().getAllRecipesFor(CrockPotRecipes.CROCK_POT_COOKING_RECIPE_TYPE.get()).stream().anyMatch(r -> r.getResultItem(level.registryAccess()).is(item));
+    }
+
+    private static Rect2i fullScreenRect() {
+        var window = Minecraft.getInstance().getWindow();
+        return new Rect2i(0, 0, window.getWidth(), window.getHeight());
     }
 
     private static class ClickableIngredient implements IClickableIngredient<ItemStack> {
@@ -169,5 +189,15 @@ public class SmartPotJeiPlugin implements IModPlugin {
         public @NotNull Rect2i getArea() {
             return rect2i;
         }
+    }
+
+    @Override
+    public void onRuntimeAvailable(@NotNull IJeiRuntime jeiRuntime) {
+        ModCompact.isJeiOverlayDisplayed.setValue(() -> jeiRuntime.getIngredientListOverlay().isListDisplayed());
+    }
+
+    @Override
+    public void onRuntimeUnavailable() {
+        ModCompact.isJeiOverlayDisplayed.reset();
     }
 }

@@ -1,5 +1,6 @@
 package com.github.zomb_676.smart_pot.widget.requirementWidget;
 
+import com.github.zomb_676.smart_pot.i18.I18Entries;
 import com.sihenzhang.crockpot.recipe.cooking.CrockPotCookingRecipe;
 import com.sihenzhang.crockpot.recipe.cooking.requirement.IRequirement;
 import net.minecraft.client.Minecraft;
@@ -8,6 +9,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +24,9 @@ public class RequirementContainerWidget extends AbstractWidget {
     private boolean pass = false;
     private int potLevel = 0;
 
+    private Component line1;
+    private Component line2;
+
     public RequirementContainerWidget() {
         super(0, 0, 0, 0, Component.empty());
     }
@@ -29,13 +34,23 @@ public class RequirementContainerWidget extends AbstractWidget {
     public void update(List<IRequirement> requirements, CrockPotCookingRecipe recipe, CrockPotCookingRecipe.Wrapper wrapper, int baseX, int baseY) {
         this.requirementWidgets = RequirementWidget.create(requirements, wrapper,
                 baseX + RequirementWidget.SUB_INNER_PADDING, baseY + 20);
-        this.setPosition(baseX, baseY);
-        this.setWidth(this.requirementWidgets.stream().mapToInt(AbstractWidget::getWidth).max().orElse(1));
-        this.setHeight(this.requirementWidgets.stream().mapToInt(AbstractWidget::getHeight).sum() + 20);
+
         this.pass = this.requirementWidgets.stream().map(r -> r.pass)
                 .reduce(Boolean::logicalAnd).orElse(Boolean.TRUE);
         this.recipe = recipe;
         this.potLevel = wrapper.getPotLevel();
+
+        var style = Style.EMPTY.withColor(this.potLevel >= recipe.getPotLevel() ? 0xffffff : 0xff0000);
+        this.line1 = I18Entries.WIDGET_PIORITY.translate(recipe.getPriority())
+                .append(Component.literal("  "))
+                .append(I18Entries.WIDGET_LEVEL.translate( this.potLevel, recipe.getPotLevel())
+                        .withStyle(style));
+        this.line2 = I18Entries.WIDGET_WEIGHT_TIME.translate(recipe.getWeight(), recipe.getCookingTime());
+
+        this.setPosition(baseX, baseY);
+        this.setWidth(Math.max(this.requirementWidgets.stream().mapToInt(AbstractWidget::getWidth).max().orElse(1),
+                Math.max(FONT.width(line1), FONT.width(line2))));
+        this.setHeight(this.requirementWidgets.stream().mapToInt(AbstractWidget::getHeight).sum() + 20);
     }
 
     @Override
@@ -45,12 +60,9 @@ public class RequirementContainerWidget extends AbstractWidget {
 
         var baseX = getX();
         var baseY = getY();
-        String text = "Piority:" + recipe.getPriority();
-        pGuiGraphics.drawString(FONT, text, baseX, baseY, 0xffffff);
-        pGuiGraphics.drawString(FONT, "PotLevel(%d):%d".formatted(this.potLevel, recipe.getPotLevel()),
-                baseX + FONT.width(text) + 5, baseY, this.potLevel >= recipe.getPotLevel() ? 0xffffffff : 0xffff0000);
+        pGuiGraphics.drawString(FONT, line1, baseX, baseY, 0xffffffff);
         baseY += 10;
-        pGuiGraphics.drawString(FONT, "Weight:%d Time:%d Ticks".formatted(recipe.getWeight(), recipe.getCookingTime()), baseX, baseY, 0xffffffff);
+        pGuiGraphics.drawString(FONT, line2, baseX, baseY, 0xffffffff);
         baseY += 10;
 
         if (this.requirementWidgets != null) {

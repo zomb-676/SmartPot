@@ -1,9 +1,7 @@
 package com.github.zomb_676.smart_pot.widget.requirementWidget;
 
-import com.github.zomb_676.smart_pot.FoodCategorySupplyTooltipComponent;
-import com.github.zomb_676.smart_pot.IngredientTest;
-import com.github.zomb_676.smart_pot.IngredientTestTooltipComponent;
-import com.github.zomb_676.smart_pot.RecipeAnalyzer;
+import com.github.zomb_676.smart_pot.*;
+import com.github.zomb_676.smart_pot.i18.I18Entries;
 import com.google.common.collect.ImmutableList;
 import com.sihenzhang.crockpot.base.FoodCategory;
 import com.sihenzhang.crockpot.recipe.FoodValuesDefinition;
@@ -507,7 +505,7 @@ class RequirementMustContainIngredientRender extends RequirementWidget<Requireme
     public void renderRequirementTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         ItemStack[] ingredientItems = this.test.ingredient.getItems();
         if (ingredientItems.length > 1) {
-            guiGraphics.renderTooltip(FONT, List.of(Component.literal("RequirementMustContainIngredient")),
+            guiGraphics.renderTooltip(FONT, List.of(I18Entries.TOOLTIP_REQUIRED_CONTAIN_INGREDIENT_GREATER),
                     tooltip.resolve(),
                     RequirementWidget.select(ingredientItemStacks),
                     mouseX, mouseY);
@@ -565,7 +563,7 @@ class RequirementMustContainIngredientLessThanRender extends RequirementWidget<R
     public void renderRequirementTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         ItemStack[] ingredientItems = this.test.ingredient.getItems();
         if (ingredientItems.length > 1) {
-            guiGraphics.renderTooltip(FONT, List.of(Component.literal("RequirementMustContainIngredientLessThan")),
+            guiGraphics.renderTooltip(FONT, List.of(I18Entries.TOOLTIP_REQUIRED_CONTAIN_INGREDIENT_LESS),
                     this.tooltip.resolve(),
                     RequirementWidget.select(ingredientItemStacks),
                     mouseX, mouseY);
