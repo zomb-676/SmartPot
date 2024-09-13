@@ -10,6 +10,7 @@ import com.sihenzhang.crockpot.recipe.cooking.CrockPotCookingRecipe;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
 import java.util.List;
@@ -116,7 +117,9 @@ public class RecipeAnalyzer {
         if (ingredientValue instanceof Ingredient.TagValue tagValue) {
             str = '#' + tagValue.tag.location().toString();
         } else if (ingredientValue instanceof Ingredient.ItemValue itemValue) {
-            str = itemValue.item.getDescriptionId().substring(6);
+            var item = itemValue.item;
+            var location = ForgeRegistries.ITEMS.getKey(item.getItem());
+            str = location != null ? location.toString() : item.getDescriptionId();
         } else {
             throw new RuntimeException("un-support Ingredient.Value from class " + ingredientValue.getClass().getName());
         }

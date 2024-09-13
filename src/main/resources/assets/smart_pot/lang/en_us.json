@@ -5,5 +5,5 @@
   "widget.smart_pot.piority": "Piority:%d",
   "widget.smart_pot.level": "PotLevel(%d)%d",
   "widget.smart_pot.weight_time": "Weight:%d Cook Time:%d Ticks",
-  "widget.smart_pot.percent_display": "percent:%.2f"
+  "widget.smart_pot.percent_display": "percent:%.2f%%"
 }
