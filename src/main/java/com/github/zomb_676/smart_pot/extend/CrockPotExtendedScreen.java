@@ -1,9 +1,9 @@
 package com.github.zomb_676.smart_pot.extend;
 
 
+import com.github.zomb_676.smart_pot.Config;
 import com.github.zomb_676.smart_pot.CookCandidate;
 import com.github.zomb_676.smart_pot.RecipeAnalyzer;
-import com.github.zomb_676.smart_pot.compat.jei.ModCompact;
 import com.github.zomb_676.smart_pot.widget.RecipeWidget;
 import com.github.zomb_676.smart_pot.widget.RecipesContainerWidget;
 import com.github.zomb_676.smart_pot.widget.SatisfyLevel;
@@ -74,15 +74,15 @@ public class CrockPotExtendedScreen {
 
         this.requirementContainerWidget = this.screen.addRenderableWidget(new RequirementContainerWidget());
 
-        var button = new VisibilityWidget(screen.getGuiLeft() + 176 - 23,
-                screen.getGuiTop() + 6, 16, 16);
+        var button = new VisibilityWidget(screen.getGuiLeft() + 176 - 16 - Config.visibilityButtonOffsetX(),
+                screen.getGuiTop() + Config.visibilityButtonOffsetY(), 16, 16);
         this.visibilityButton = this.screen.addRenderableWidget(button);
     }
 
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        var hide = !ModCompact.isJeiOverlayDisplayed.get().getAsBoolean();
-        this.recipesContainerWidget.visible = hide;
-        this.requirementContainerWidget.visible = hide;
+        var visibility = this.visibilityButton.isVisibility();
+        this.recipesContainerWidget.visible = visibility;
+        this.requirementContainerWidget.visible = visibility;
 
         if (updateRecordInputs()) {
             this.reCalculateRecipes();

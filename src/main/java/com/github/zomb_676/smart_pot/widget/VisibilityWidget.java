@@ -1,5 +1,4 @@
-package com.github.zomb_676.smart_pot.widget;
-
+package com.github.zomb_676.smart_pot.widget;import com.github.zomb_676.smart_pot.Config;
 import com.github.zomb_676.smart_pot.i18.I18Entries;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -10,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 
 public class VisibilityWidget extends AbstractWidget {
 
-    private static boolean visibility = true;
     private static final ResourceLocation ICON_LOCATION = new ResourceLocation("crockpot", "textures/item/book.png");
     private static final int EXTEND = 2;
 
@@ -31,7 +29,8 @@ public class VisibilityWidget extends AbstractWidget {
 
     @Override
     public void onClick(double pMouseX, double pMouseY) {
-        visibility = !visibility;
+        var visibility = Config.uiVisibility;
+        visibility.set(!visibility.get());
     }
 
     @Override
@@ -40,6 +39,6 @@ public class VisibilityWidget extends AbstractWidget {
     }
 
     public boolean isVisibility() {
-        return visibility;
+        return Config.uiVisibility.get();
     }
 }
