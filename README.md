@@ -31,4 +31,8 @@ the tooltip will display the ingredients that can be received, for tags, will be
 
 what's more, as you can see in the picture, the matched items in inventory and slots will be highlighted   
 move your mouse to a different place can select the compose requiment to display, the selected requirement is also highlighted
-![select](https://github.com/user-attachments/assets/f3b6cdb4-45c1-4ece-90d0-2641a871b53f)
+![select](https://github.com/user-attachments/assets/f3b6cdb4-45c1-4ece-90d0-2641a871b53f)  
+
+you can now change the visibility by the button(its position can by adjusted in config) added by this mod, this works under both vanilla/jei/emi
+![changeVisibility](https://github.com/user-attachments/assets/438c5019-aec7-4b38-94b4-96e1d18ab3a8)
+
